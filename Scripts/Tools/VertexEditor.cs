@@ -909,8 +909,7 @@ namespace Sabresaurus.SabreCSG
 					{
                         foreach (var v in SelectedVerticesOfBrush(brush))
                         {
-
-                            vertices.Add(brush.transform.position + v.Position);
+                            vertices.Add(brush.transform.TransformPoint(v.Position));
                         }
 					}
 
@@ -924,10 +923,11 @@ namespace Sabresaurus.SabreCSG
 
                         var tmp = new List<Vector3>(vertices);
                         GameObject line = new GameObject("TransitionLine");
+                        line.transform.parent = targetBrushes[0].transform; // This might be wrong with compound brushes idk.
                         var ed = line.AddComponent<Environment.Alignable>();
 
                         Vector3 ave = (tmp[0] + tmp[1]) / 2;
-                        line.transform.localPosition = ave;
+                        line.transform.position = ave;
 
                         ed.p1 = tmp[0] - ave;
                         ed.p2 = tmp[1] - ave;
