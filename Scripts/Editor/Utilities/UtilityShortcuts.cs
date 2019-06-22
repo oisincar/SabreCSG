@@ -16,9 +16,9 @@ namespace Sabresaurus.SabreCSG
 		{
 			// Create objects to hold the CSG Model and Work Brush (with associated scripts attached)
 			GameObject rootGameObject = new GameObject("CSGModel", typeof(CSGModel));
-			
+
 			Undo.RegisterCreatedObjectUndo (rootGameObject, "Create New CSG Model");
-			
+
 			// Set the user's selection to the new CSG Model, so that they can start working with it
 			Selection.activeGameObject = rootGameObject;
 
@@ -29,7 +29,7 @@ namespace Sabresaurus.SabreCSG
 			// got a few brushes.
 			Lightmapping.giWorkflowMode = Lightmapping.GIWorkflowMode.OnDemand;
 		}
-		
+
 		[MenuItem("Edit/Rebuild CSG " + KeyMappings.Rebuild, false, 100)]
 		static void Rebuild()
 		{
@@ -92,7 +92,7 @@ namespace Sabresaurus.SabreCSG
 
 			EditorUtility.LoadWindowLayout(filePath);
 
-			for (int i = 0; i < 4; i++) 
+			for (int i = 0; i < 4; i++)
 			{
 				SceneView sceneView = ((SceneView)SceneView.sceneViews[i]);
 				if(EditorHelper.GetSceneViewCamera(sceneView) == EditorHelper.SceneViewCamera.Other)
