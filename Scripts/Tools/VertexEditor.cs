@@ -13,7 +13,7 @@ namespace Sabresaurus.SabreCSG
 		List<Edge> selectedEdges = new List<Edge>();
 		Dictionary<Vertex, Brush> selectedVertices = new Dictionary<Vertex, Brush>();
 
-		bool moveInProgress = false; 
+		bool moveInProgress = false;
 
 		bool isMarqueeSelection = false; // Whether the user is (or could be) dragging a marquee box
         bool marqueeCancelled = false;
@@ -47,13 +47,13 @@ namespace Sabresaurus.SabreCSG
 			List<Vertex> verticesToRemove = new List<Vertex>();
 
 			// Calculate what selected vertices no longer exist in their brush
-			foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices) 
+			foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices)
 			{
 				Polygon[] polygons = selectedVertex.Value.GetPolygons();
 
 				bool vertexPresent = false;
 				// Check if the vertex is actually in the brush
-				for (int i = 0; i < polygons.Length; i++) 
+				for (int i = 0; i < polygons.Length; i++)
 				{
 					if(System.Array.IndexOf(polygons[i].Vertices, selectedVertex.Key) != -1)
 					{
@@ -71,7 +71,7 @@ namespace Sabresaurus.SabreCSG
 			}
 
 			// Now actually remove the vertices in a separate loop (can't do this while iterating over the dictionary)
-			for (int i = 0; i < verticesToRemove.Count; i++) 
+			for (int i = 0; i < verticesToRemove.Count; i++)
 			{
 				selectedVertices.Remove(verticesToRemove[i]);
 			}
@@ -97,21 +97,21 @@ namespace Sabresaurus.SabreCSG
 
 				Dictionary<Brush, List<Vertex>> refinedSelections = new Dictionary<Brush, List<Vertex>>();
 
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					refinedSelections.Add(brush, SelectedVerticesOfBrush(brush));
 				}
 
 				bool selectionCleared = false;
 
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
                     Polygon[] sourcePolygons = brush.GetPolygons();
                     // Make a copy so that we can differentiate newPolygons from the original, since welding updates affected polygons in place
                     Polygon[] sourcePolygonsCopy = sourcePolygons.DeepCopy();
 
 					List<Vertex> allVertices = new List<Vertex>();
-					for (int i = 0; i < sourcePolygonsCopy.Length; i++) 
+					for (int i = 0; i < sourcePolygonsCopy.Length; i++)
 					{
 						allVertices.AddRange(sourcePolygonsCopy[i].Vertices);
 					}
@@ -161,17 +161,17 @@ namespace Sabresaurus.SabreCSG
         }
 
 		public void ScaleSelectedVertices(float scalar)
-		{	
+		{
 			Vector3 scalarCenter = GetSelectedCenter();
 
 			// So we know which polygons need to have their normals recalculated
 			List<Polygon> affectedPolygons = new List<Polygon>();
 
-			foreach (PrimitiveBrush brush in targetBrushes) 
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				Polygon[] polygons = brush.GetPolygons();
 
-				for (int i = 0; i < polygons.Length; i++) 
+				for (int i = 0; i < polygons.Length; i++)
 				{
 					Polygon polygon = polygons[i];
 
@@ -180,14 +180,14 @@ namespace Sabresaurus.SabreCSG
 					Vector3[] newPositions = new Vector3[vertexCount];
 					Vector2[] newUV = new Vector2[vertexCount];
 
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						newPositions[j] = polygon.Vertices[j].Position;
 						newUV[j] = polygon.Vertices[j].UV;
 					}
 
 					bool polygonAffected = false;
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						if(selectedVertices.ContainsKey(vertex))
@@ -214,7 +214,7 @@ namespace Sabresaurus.SabreCSG
 					}
 
 					// Apply all the changes to the polygon
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						vertex.Position = newPositions[j];
@@ -227,12 +227,12 @@ namespace Sabresaurus.SabreCSG
 
 			if(affectedPolygons.Count > 0)
 			{
-				for (int i = 0; i < affectedPolygons.Count; i++) 
+				for (int i = 0; i < affectedPolygons.Count; i++)
 				{
 					affectedPolygons[i].ResetVertexNormals();
 				}
 
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					brush.Invalidate(true);
 
@@ -242,15 +242,15 @@ namespace Sabresaurus.SabreCSG
 		}
 
 		public void TranslateSelectedVertices(Vector3 worldDelta)
-		{	
-			foreach (PrimitiveBrush brush in targetBrushes) 
+		{
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				bool anyAffected = false;
 
 				Polygon[] polygons = brush.GetPolygons();
 				Vector3 localDelta = brush.transform.InverseTransformDirection(worldDelta);
 
-				for (int i = 0; i < polygons.Length; i++) 
+				for (int i = 0; i < polygons.Length; i++)
 				{
 					Polygon polygon = polygons[i];
 
@@ -262,7 +262,7 @@ namespace Sabresaurus.SabreCSG
 					Vector3[] newPositions = new Vector3[vertexCount];
 					Vector2[] newUV = new Vector2[vertexCount];
 
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						newPositions[j] = polygon.Vertices[j].Position;
 						newUV[j] = polygon.Vertices[j].UV;
@@ -270,7 +270,7 @@ namespace Sabresaurus.SabreCSG
 
 					bool polygonAffected = false;
 
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						if(selectedVertices.ContainsKey(vertex))
@@ -303,7 +303,7 @@ namespace Sabresaurus.SabreCSG
 					}
 
 					// Apply all the changes to the polygon
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						vertex.Position = newPositions[j];
@@ -321,7 +321,7 @@ namespace Sabresaurus.SabreCSG
 						Quaternion normalRotation = Quaternion.FromToRotation(previousPlaneNormal, newPlaneNormal);
 
 						// Update the affected normals so they are rotated by the rotational difference of the polygon from translation
-						for (int j = 0; j < vertexCount; j++) 
+						for (int j = 0; j < vertexCount; j++)
 						{
 							Vertex vertex = polygon.Vertices[j];
 							vertex.Normal = normalRotation * vertex.Normal;
@@ -349,33 +349,33 @@ namespace Sabresaurus.SabreCSG
 			// So we know which polygons need to have their normals recalculated
 			List<Polygon> affectedPolygons = new List<Polygon>();
 
-			foreach (PrimitiveBrush brush in targetBrushes) 
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				Polygon[] polygons = brush.GetPolygons();
 
-				for (int i = 0; i < polygons.Length; i++) 
+				for (int i = 0; i < polygons.Length; i++)
 				{
 					Polygon polygon = polygons[i];
-					
+
 					int vertexCount = polygon.Vertices.Length;
-					
+
 					Vector3[] newPositions = new Vector3[vertexCount];
 					Vector2[] newUV = new Vector2[vertexCount];
-					
-					for (int j = 0; j < vertexCount; j++) 
+
+					for (int j = 0; j < vertexCount; j++)
 					{
 						newPositions[j] = polygon.Vertices[j].Position;
 						newUV[j] = polygon.Vertices[j].UV;
 					}
 
 					bool polygonAffected = false;
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						if(selectedVertices.ContainsKey(vertex))
 						{
 							Vector3 newPosition = vertex.Position;
-							
+
 							float snapDistance = CurrentSettings.PositionSnapDistance;
 							if(isAbsoluteGrid)
 							{
@@ -386,7 +386,7 @@ namespace Sabresaurus.SabreCSG
 							{
 								newPosition = brush.transform.InverseTransformPoint(newPosition);
 							}
-							
+
 							newPositions[j] = newPosition;
 
 							newUV[j] = GeometryHelper.GetUVForPosition(polygon, newPosition);
@@ -399,9 +399,9 @@ namespace Sabresaurus.SabreCSG
 					{
 						affectedPolygons.Add(polygon);
 					}
-					
+
 					// Apply all the changes to the polygon
-					for (int j = 0; j < vertexCount; j++) 
+					for (int j = 0; j < vertexCount; j++)
 					{
 						Vertex vertex = polygon.Vertices[j];
 						vertex.Position = newPositions[j];
@@ -414,12 +414,12 @@ namespace Sabresaurus.SabreCSG
 
 			if(affectedPolygons.Count > 0)
 			{
-				for (int i = 0; i < affectedPolygons.Count; i++) 
+				for (int i = 0; i < affectedPolygons.Count; i++)
 				{
 					affectedPolygons[i].ResetVertexNormals();
 				}
 
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					brush.Invalidate(true);
 
@@ -442,20 +442,20 @@ namespace Sabresaurus.SabreCSG
 				}
 			}
 		}
-		
+
 		// Used so that the gizmo for moving the points is positioned at the average between the selection
 		public Vector3 GetSelectedCenter()
 		{
 			Vector3 average = Vector3.zero;
 			int numberFound = 0;
 
-			foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices) 
+			foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices)
 			{
 				Vector3 worldPosition = selectedVertex.Value.transform.TransformPoint(selectedVertex.Key.Position);
 				average += worldPosition;
 				numberFound++;
 			}
-			
+
 			if(numberFound > 0)
 			{
 				return average / numberFound;
@@ -489,10 +489,10 @@ namespace Sabresaurus.SabreCSG
 			{
 				if(startPositions.Count == 0)
 				{
-					foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices) 
+					foreach (KeyValuePair<Vertex, Brush> selectedVertex in selectedVertices)
 					{
 						startPositions.Add(selectedVertex.Key, selectedVertex.Key.Position);
-					}				
+					}
 				}
 
 				// Make the handle respect the Unity Editor's Local/World orientation mode
@@ -501,7 +501,7 @@ namespace Sabresaurus.SabreCSG
 				{
 					handleDirection = primaryTargetBrush.transform.rotation;
 				}
-				
+
 				// Grab a source point and convert from local space to world.
                 // This is the emergency fall-back solution when no vertex is found.
 				Vector3 sourceWorldPosition = GetSelectedCenter();
@@ -515,7 +515,7 @@ namespace Sabresaurus.SabreCSG
 					List<PrimitiveBrush> changedBrushes = AutoWeld();
 
                     // Only invalidate the brushes that have actually changed
-					foreach (PrimitiveBrush brush in changedBrushes) 
+					foreach (PrimitiveBrush brush in changedBrushes)
 					{
 						brush.Invalidate(true);
 
@@ -550,7 +550,7 @@ namespace Sabresaurus.SabreCSG
 				{
 					Undo.RecordObjects(targetBrushTransforms, "Moved Vertices");
 					Undo.RecordObjects(targetBrushes, "Moved Vertices");
-					
+
 					Vector3 deltaWorld = newWorldPosition - sourceWorldPosition;
 
 					//				if(deltaLocal.sqrMagnitude > 0)
@@ -558,7 +558,7 @@ namespace Sabresaurus.SabreCSG
 					TranslateSelectedVertices(deltaWorld);
 					isMarqueeSelection = false;
 					moveInProgress = true;
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						EditorUtility.SetDirty (brush);
 					}
@@ -573,9 +573,9 @@ namespace Sabresaurus.SabreCSG
 					if(pivotNeedsReset)
 					{
 						// Pivot needs to be reset, so reset it!
-						foreach (PrimitiveBrush brush in targetBrushes) 
+						foreach (PrimitiveBrush brush in targetBrushes)
 						{
-							brush.ResetPivot();	
+							brush.ResetPivot();
 						}
 
 						pivotNeedsReset = false;
@@ -587,12 +587,12 @@ namespace Sabresaurus.SabreCSG
 
 			if(primaryTargetBrush != null)
 			{
-				
-				if (e.type == EventType.MouseDown) 
+
+				if (e.type == EventType.MouseDown)
 				{
 					OnMouseDown(sceneView, e);
 				}
-				else if (e.type == EventType.MouseDrag) 
+				else if (e.type == EventType.MouseDrag)
 				{
 					OnMouseDrag(sceneView, e);
 				}
@@ -631,11 +631,11 @@ namespace Sabresaurus.SabreCSG
 			// Select the new edge
 			selectedEdges.Add(newEdge);
 
-			for (int i = 0; i < polygons.Length; i++) 
+			for (int i = 0; i < polygons.Length; i++)
 			{
 				Polygon polygon = polygons[i];
 
-				for (int j = 0; j < polygon.Vertices.Length; j++) 
+				for (int j = 0; j < polygon.Vertices.Length; j++)
 				{
 					Vertex vertex = polygon.Vertices[j];
 
@@ -654,15 +654,15 @@ namespace Sabresaurus.SabreCSG
 
 		void SelectVertices(Brush brush, Polygon[] polygons, List<Vertex> newSelectedVertices)
 		{
-			for (int i = 0; i < polygons.Length; i++) 
+			for (int i = 0; i < polygons.Length; i++)
 			{
 				Polygon polygon = polygons[i];
 
-				for (int j = 0; j < polygon.Vertices.Length; j++) 
+				for (int j = 0; j < polygon.Vertices.Length; j++)
 				{
 					Vertex vertex = polygon.Vertices[j];
 
-					for (int k = 0; k < newSelectedVertices.Count; k++) 
+					for (int k = 0; k < newSelectedVertices.Count; k++)
 					{
 						if(newSelectedVertices[k].Position == vertex.Position)
 						{
@@ -693,14 +693,14 @@ namespace Sabresaurus.SabreCSG
 					// Cache selection
 					Dictionary<Brush, List<Vertex>> refinedSelections = new Dictionary<Brush, List<Vertex>>();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						refinedSelections.Add(brush, SelectedVerticesOfBrush(brush));
 					}
 
 					ClearSelection();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Undo.RecordObject(brush.transform, "Connect Vertices");
 						Undo.RecordObject(brush, "Connect Vertices");
@@ -709,16 +709,16 @@ namespace Sabresaurus.SabreCSG
 
 //						Polygon[] newPolygons = VertexUtility.ConnectVertices(brush.GetPolygons(), refinedSelections[brush], out newEdge);
 						Polygon[] newPolygons = VertexUtility.ConnectVertices(brush.GetPolygons(), refinedSelections[brush], out newEdges);
-						
+
 						if(newPolygons != null)
 						{
 							brush.SetPolygons(newPolygons);
 
-							for (int i = 0; i < newEdges.Count; i++) 
+							for (int i = 0; i < newEdges.Count; i++)
 							{
 								SelectEdges(brush, newPolygons, newEdges[i]);
 							}
-						}							
+						}
 					}
 				}
 			}
@@ -729,12 +729,12 @@ namespace Sabresaurus.SabreCSG
 //				{
 //					Dictionary<Brush, List<Vertex>> refinedSelections = new Dictionary<Brush, List<Vertex>>();
 //
-//					foreach (PrimitiveBrush brush in targetBrushes) 
+//					foreach (PrimitiveBrush brush in targetBrushes)
 //					{
 //						refinedSelections.Add(brush, SelectedVerticesOfBrush(brush));
 //					}
 //
-//					foreach (PrimitiveBrush brush in targetBrushes) 
+//					foreach (PrimitiveBrush brush in targetBrushes)
 //					{
 //						Undo.RecordObject(brush.transform, "Remove Vertices");
 //						Undo.RecordObject(brush, "Remove Vertices");
@@ -755,20 +755,20 @@ namespace Sabresaurus.SabreCSG
 				{
 					Dictionary<Brush, List<Vertex>> refinedSelections = new Dictionary<Brush, List<Vertex>>();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						refinedSelections.Add(brush, SelectedVerticesOfBrush(brush));
 					}
 
 					ClearSelection();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Undo.RecordObject(brush.transform, "Weld Vertices");
 						Undo.RecordObject(brush, "Weld Vertices");
 
 						Polygon[] newPolygons = VertexUtility.WeldVerticesToCenter(brush.GetPolygons(), refinedSelections[brush]);
-						
+
 						if(newPolygons != null)
 						{
 							brush.SetPolygons(newPolygons);
@@ -785,9 +785,9 @@ namespace Sabresaurus.SabreCSG
 			GUI.SetNextControlName("weldToleranceField");
 			weldTolerance = EditorGUILayout.FloatField(weldTolerance);
 
-			bool keyboardEnter = Event.current.isKey 
-				&& Event.current.keyCode == KeyCode.Return 
-				&& Event.current.type == EventType.KeyUp 
+			bool keyboardEnter = Event.current.isKey
+				&& Event.current.keyCode == KeyCode.Return
+				&& Event.current.type == EventType.KeyUp
 				&& GUI.GetNameOfFocusedControl() == "weldToleranceField";
 
 			if (GUILayout.Button("Weld with Tolerance", EditorStyles.miniButton) || keyboardEnter)
@@ -796,14 +796,14 @@ namespace Sabresaurus.SabreCSG
 				{
 					Dictionary<Brush, List<Vertex>> refinedSelections = new Dictionary<Brush, List<Vertex>>();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						refinedSelections.Add(brush, SelectedVerticesOfBrush(brush));
 					}
 
 					ClearSelection();
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Undo.RecordObject(brush.transform, "Weld Vertices");
 						Undo.RecordObject(brush, "Weld Vertices");
@@ -826,7 +826,7 @@ namespace Sabresaurus.SabreCSG
 
 			if (GUILayout.Button("Global Snap", EditorStyles.miniButton))
 			{
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					Undo.RecordObject(brush.transform, "Snap Vertices");
 					Undo.RecordObject(brush, "Snap Vertices");
@@ -837,7 +837,7 @@ namespace Sabresaurus.SabreCSG
 
 			if (GUILayout.Button("Local Snap", EditorStyles.miniButton))
 			{
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					Undo.RecordObject(brush.transform, "Snap Vertices");
 					Undo.RecordObject(brush, "Snap Vertices");
@@ -852,14 +852,14 @@ namespace Sabresaurus.SabreCSG
 			GUI.SetNextControlName("scaleField");
 			scale = EditorGUILayout.FloatField(scale);
 
-			keyboardEnter = Event.current.isKey 
-				&& Event.current.keyCode == KeyCode.Return 
-				&& Event.current.type == EventType.KeyUp 
+			keyboardEnter = Event.current.isKey
+				&& Event.current.keyCode == KeyCode.Return
+				&& Event.current.type == EventType.KeyUp
 				&& GUI.GetNameOfFocusedControl() == "scaleField";
 
 			if (GUILayout.Button("Scale", EditorStyles.miniButton) || keyboardEnter)
 			{
-				foreach (PrimitiveBrush brush in targetBrushes) 
+				foreach (PrimitiveBrush brush in targetBrushes)
 				{
 					Undo.RecordObject(brush.transform, "Scale Vertices");
 					Undo.RecordObject(brush, "Scale Vertices");
@@ -879,7 +879,7 @@ namespace Sabresaurus.SabreCSG
 				{
 					List<Edge> selectedEdgesCopy = new List<Edge>(selectedEdges);
 					ClearSelection();
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Undo.RecordObject(brush.transform, "Connect Mid-Points");
 						Undo.RecordObject(brush, "Connect Mid-Points");
@@ -890,13 +890,51 @@ namespace Sabresaurus.SabreCSG
 
 						brush.SetPolygons(newPolygons);
 
-						for (int i = 0; i < newEdges.Count; i++) 
+						for (int i = 0; i < newEdges.Count; i++)
 						{
 							SelectEdges(brush, newPolygons, newEdges[i]);
 						}
 					}
 				}
 			}
+
+            // Custom WIZLIZ!!
+			if (GUILayout.Button("WL: Export as edge-line", EditorStyles.miniButton))
+			{
+				if(selectedVertices != null)
+				{
+					var vertices = new HashSet<Vector3>();
+                    // Grab all vertices
+					foreach (PrimitiveBrush brush in targetBrushes)
+					{
+                        foreach (var v in SelectedVerticesOfBrush(brush))
+                        {
+
+                            vertices.Add(brush.transform.position + v.Position);
+                        }
+					}
+
+					ClearSelection();
+
+                    foreach (var v in vertices) {
+                        Debug.Log(v);
+                    }
+                    if (vertices.Count == 2) {
+                        Debug.Log("Creating Edge");
+
+                        var tmp = new List<Vector3>(vertices);
+                        GameObject line = new GameObject("TransitionLine");
+                        var ed = line.AddComponent<Environment.Alignable>();
+
+                        Vector3 ave = (tmp[0] + tmp[1]) / 2;
+                        line.transform.localPosition = ave;
+
+                        ed.p1 = tmp[0] - ave;
+                        ed.p2 = tmp[1] - ave;
+                    }
+				}
+			}
+
 
 			GUILayout.BeginHorizontal();
 
@@ -905,20 +943,20 @@ namespace Sabresaurus.SabreCSG
 				if(selectedEdges != null)
 				{
 					List<KeyValuePair<Vertex, Brush>> newSelectedVertices = new List<KeyValuePair<Vertex, Brush>>();
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Undo.RecordObject(brush.transform, "Split Edge");
 						Undo.RecordObject(brush, "Split Edge");
 						Polygon[] polygons = brush.GetPolygons();
 
-						for (int j = 0; j < selectedEdges.Count; j++) 
+						for (int j = 0; j < selectedEdges.Count; j++)
 						{
 							// First check if this edge actually belongs to the brush
 							Brush parentBrush = selectedVertices[selectedEdges[j].Vertex1];
 
 							if(parentBrush == brush)
 							{
-								for (int i = 0; i < polygons.Length; i++) 
+								for (int i = 0; i < polygons.Length; i++)
 								{
 									Vertex newVertex;
 									if(EdgeUtility.SplitPolygonAtEdge(polygons[i], selectedEdges[j], out newVertex))
@@ -934,7 +972,7 @@ namespace Sabresaurus.SabreCSG
 
 					ClearSelection();
 
-					for (int i = 0; i < newSelectedVertices.Count; i++) 
+					for (int i = 0; i < newSelectedVertices.Count; i++)
 					{
 						Brush brush = newSelectedVertices[i].Value;
 						Vertex vertex = newSelectedVertices[i].Key;
@@ -943,7 +981,7 @@ namespace Sabresaurus.SabreCSG
 					}
 				}
 			}
-		
+
 			GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
@@ -960,7 +998,7 @@ namespace Sabresaurus.SabreCSG
 		{
 			List<Vertex> refinedSelection = new List<Vertex>();
 
-			foreach (KeyValuePair<Vertex, Brush> selectedVertexPair in selectedVertices) 
+			foreach (KeyValuePair<Vertex, Brush> selectedVertexPair in selectedVertices)
 			{
 				if(selectedVertexPair.Value == brush)
 				{
@@ -1060,24 +1098,24 @@ namespace Sabresaurus.SabreCSG
 						selectedEdges.Clear();
 
 						isMarqueeSelection = false;
-						
+
 						marqueeEnd = e.mousePosition;
 
 						foreach(PrimitiveBrush brush in targetBrushes)
 						{
 							Polygon[] polygons = brush.GetPolygons();
 
-							for (int i = 0; i < polygons.Length; i++) 
+							for (int i = 0; i < polygons.Length; i++)
 							{
 								Polygon polygon = polygons[i];
-								
-								for (int j = 0; j < polygon.Vertices.Length; j++) 
+
+								for (int j = 0; j < polygon.Vertices.Length; j++)
 								{
 									Vertex vertex = polygon.Vertices[j];
-									
+
 									Vector3 worldPosition = brush.transform.TransformPoint(vertex.Position);
 									Vector3 screenPoint = sceneView.camera.WorldToScreenPoint(worldPosition);
-									
+
 									// Point is contained within marquee box
 									if(SabreMouse.MarqueeContainsPoint(marqueeStart, marqueeEnd, screenPoint))
 									{
@@ -1095,7 +1133,7 @@ namespace Sabresaurus.SabreCSG
 											}
 										}
 									}
-									else if(!EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Control) 
+									else if(!EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Control)
 									        && !EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Shift))
 									{
 										selectedVertices.Remove(vertex);
@@ -1115,14 +1153,14 @@ namespace Sabresaurus.SabreCSG
 						Vector3 closestVertexWorldPosition = Vector3.zero;
 						float closestDistanceSquare = float.PositiveInfinity;
 
-						foreach (PrimitiveBrush brush in targetBrushes) 
+						foreach (PrimitiveBrush brush in targetBrushes)
 						{
 							Polygon[] polygons = brush.GetPolygons();
-							for (int i = 0; i < polygons.Length; i++) 
+							for (int i = 0; i < polygons.Length; i++)
 							{
 								Polygon polygon = polygons[i];
 
-								for (int j = 0; j < polygon.Vertices.Length; j++) 
+								for (int j = 0; j < polygon.Vertices.Length; j++)
 								{
 									Vertex vertex = polygon.Vertices[j];
 
@@ -1146,14 +1184,14 @@ namespace Sabresaurus.SabreCSG
 							ClearSelection();
 						}
 
-						foreach (PrimitiveBrush brush in targetBrushes) 
+						foreach (PrimitiveBrush brush in targetBrushes)
 						{
 							Polygon[] polygons = brush.GetPolygons();
-							for (int i = 0; i < polygons.Length; i++) 
+							for (int i = 0; i < polygons.Length; i++)
 							{
 								Polygon polygon = polygons[i];
-								
-								for (int j = 0; j < polygon.Vertices.Length; j++) 
+
+								for (int j = 0; j < polygon.Vertices.Length; j++)
 								{
 									Vertex vertex = polygon.Vertices[j];
 									Vector3 worldPosition = brush.transform.TransformPoint(vertex.Position);
@@ -1178,7 +1216,7 @@ namespace Sabresaurus.SabreCSG
 											}
 										}
 									}
-									else if(!EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Control) 
+									else if(!EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Control)
 									        && !EnumHelper.IsFlagSet(e.modifiers, EventModifiers.Shift))
 									{
 										selectedVertices.Remove(vertex);
@@ -1198,13 +1236,13 @@ namespace Sabresaurus.SabreCSG
 							// one click, then we only count the closest
 							float closestFound = float.PositiveInfinity;
 
-							foreach (PrimitiveBrush brush in targetBrushes) 
+							foreach (PrimitiveBrush brush in targetBrushes)
 							{
 								Polygon[] polygons = brush.GetPolygons();
-								for (int i = 0; i < polygons.Length; i++) 
+								for (int i = 0; i < polygons.Length; i++)
 								{
 									Polygon polygon = polygons[i];
-									for (int j = 0; j < polygon.Vertices.Length; j++) 
+									for (int j = 0; j < polygon.Vertices.Length; j++)
 									{
 										Vector3 worldPoint1 = brush.transform.TransformPoint(polygon.Vertices[j].Position);
 										Vector3 worldPoint2 = brush.transform.TransformPoint(polygon.Vertices[(j+1) % polygon.Vertices.Length].Position);
@@ -1234,15 +1272,15 @@ namespace Sabresaurus.SabreCSG
 
 								selectedEdges.Add(selectedEdge);
 
-								foreach (PrimitiveBrush brush in targetBrushes) 
+								foreach (PrimitiveBrush brush in targetBrushes)
 								{
 									Polygon[] polygons = brush.GetPolygons();
 
-									for (int i = 0; i < polygons.Length; i++) 
+									for (int i = 0; i < polygons.Length; i++)
 									{
 										Polygon polygon = polygons[i];
 
-										for (int j = 0; j < polygon.Vertices.Length; j++) 
+										for (int j = 0; j < polygon.Vertices.Length; j++)
 										{
 											Vertex vertex = polygon.Vertices[j];
 
@@ -1263,7 +1301,7 @@ namespace Sabresaurus.SabreCSG
 					}
 					moveInProgress = false;
 
-					
+
 					// Repaint all scene views to show the selection change
 					SceneView.RepaintAll();
 				}
@@ -1286,15 +1324,15 @@ namespace Sabresaurus.SabreCSG
 			GL.Begin(GL.QUADS);
 
 			// Draw each handle, colouring it if it's selected
-			foreach (PrimitiveBrush brush in targetBrushes) 
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				Polygon[] polygons = brush.GetPolygons();
 
 				Vector3 target;
 
-				for (int i = 0; i < polygons.Length; i++) 
+				for (int i = 0; i < polygons.Length; i++)
 				{
-					for (int j = 0; j < polygons[i].Vertices.Length; j++) 
+					for (int j = 0; j < polygons[i].Vertices.Length; j++)
 					{
 						Vertex vertex = polygons[i].Vertices[j];
 
@@ -1326,7 +1364,7 @@ namespace Sabresaurus.SabreCSG
 			GL.Begin(GL.LINES);
 			GL.Color(Color.green);
 
-			for (int edgeIndex = 0; edgeIndex < selectedEdges.Count; edgeIndex++) 
+			for (int edgeIndex = 0; edgeIndex < selectedEdges.Count; edgeIndex++)
 			{
 				Edge edge = selectedEdges[edgeIndex];
 
@@ -1493,7 +1531,7 @@ namespace Sabresaurus.SabreCSG
 
         public override void Deactivated ()
 		{
-			
+
 		}
 	}
 }
