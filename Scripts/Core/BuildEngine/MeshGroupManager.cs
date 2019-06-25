@@ -8,6 +8,7 @@ using System.Reflection;
 using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.Rendering;
+using System.Linq;
 
 namespace Sabresaurus.SabreCSG
 {
@@ -63,7 +64,15 @@ namespace Sabresaurus.SabreCSG
             }
 
             // Finally destroy the game objects and components
-            meshGroupHolder.DestroyChildrenImmediate();
+            // meshGroupHolder.DestroyChildrenImmediate();
+            var toDel = new List<GameObject>();
+            foreach (Transform c in meshGroupHolder) {
+                if (c.name == "MaterialMesh" || c.name == "CollisionMesh") {
+                    toDel.Add(c.gameObject);
+                }
+            }
+
+            toDel.ForEach(o => GameObject.DestroyImmediate(o));
         }
 
         internal static void BuildVisual(Transform meshGroupHolder,

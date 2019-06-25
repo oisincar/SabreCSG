@@ -923,7 +923,10 @@ namespace Sabresaurus.SabreCSG
 
                         var tmp = new List<Vector3>(vertices);
                         GameObject line = new GameObject("TransitionLine");
-                        line.transform.parent = targetBrushes[0].transform; // This might be wrong with compound brushes idk.
+                        // TODO: Add to local CSG object, but need to change what's loaded into play mode.
+                        // This might be wrong with compound brushes idk.
+                        var meshgroup = targetBrushes[0].transform.parent.Find("MeshGroup");
+                        line.transform.parent = meshgroup;
                         var ed = line.AddComponent<Environment.Alignable>();
 
                         Vector3 ave = (tmp[0] + tmp[1]) / 2;
