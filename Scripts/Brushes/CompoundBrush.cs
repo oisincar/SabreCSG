@@ -57,7 +57,7 @@ namespace Sabresaurus.SabreCSG
         protected virtual void Start()
 		{
 			generatedBrushes = new List<PrimitiveBrush>(GetComponentsInChildren<PrimitiveBrush>());
-			for (int i = 0; i < generatedBrushes.Count; i++) 
+			for (int i = 0; i < generatedBrushes.Count; i++)
 			{
 				generatedBrushes[i].SetBrushController(this);
 			}
@@ -71,7 +71,7 @@ namespace Sabresaurus.SabreCSG
 			if(generatedBrushes.Count > BrushCount)
 			{
 				// Trim off the extraneous brushes
-				for (int i = BrushCount; i < generatedBrushes.Count; i++) 
+				for (int i = BrushCount; i < generatedBrushes.Count; i++)
 				{
 					if(generatedBrushes[i] != null)
 					{
@@ -246,7 +246,7 @@ namespace Sabresaurus.SabreCSG
 		public override void OnUndoRedoPerformed ()
 		{
 			generatedBrushes = new List<PrimitiveBrush>(GetComponentsInChildren<PrimitiveBrush>());
-			for (int i = 0; i < generatedBrushes.Count; i++) 
+			for (int i = 0; i < generatedBrushes.Count; i++)
 			{
 				generatedBrushes[i].SetBrushController(this);
 			}
@@ -255,15 +255,14 @@ namespace Sabresaurus.SabreCSG
 		}
 
 		/// <summary>
-		/// Searches the main C# assembly for compound brushes that can be instantiated 
+		/// Searches the main C# assembly for compound brushes that can be instantiated
 		/// </summary>
 		/// <returns>All matched types.</returns>
 		public static List<Type> FindAllInAssembly()
 		{
 			List<Type> matchedTypes = new List<Type>();
-
 			Assembly[] allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			foreach (Assembly assembly in allAssemblies) 
+			foreach (Assembly assembly in allAssemblies)
 			{
 				// Walk through all the types in the main assembly
 				if(assembly.FullName.StartsWith("Assembly-CSharp")
@@ -271,7 +270,7 @@ namespace Sabresaurus.SabreCSG
 				{
 					Type[] types = assembly.GetTypes();
 
-					for (int i = 0; i < types.Length; i++) 
+					for (int i = 0; i < types.Length; i++)
 					{
 						// If the Type inherits from CompoundBrush and is not abstract
 						if(!types[i].IsAbstract && types[i].IsSubclassOf(typeof(CompoundBrush)))

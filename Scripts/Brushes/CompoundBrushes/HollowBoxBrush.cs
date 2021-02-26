@@ -49,13 +49,16 @@ namespace Sabresaurus.SabreCSG
 
         /// <summary>
         /// Is the size of the bounds X, Y, and Z above the minimum size?
+        /// NOTE: Should probably be called 'IsBrushXYZBigEnough'
         /// </summary>
         /// <returns></returns>
-        public bool IsBrushXYZTooSmall
+        private bool IsBrushXYZTooSmall
         {
             get
             {
-                return localBounds.size.x > wallThickness * 2.0f && localBounds.size.z > wallThickness * 2.0f && localBounds.size.y > wallThickness * 2;
+                return localBounds.size.x > wallThickness * 2.0f
+                    && localBounds.size.z > wallThickness * 2.0f
+                    && localBounds.size.y > wallThickness * 2;
             }
         }
 

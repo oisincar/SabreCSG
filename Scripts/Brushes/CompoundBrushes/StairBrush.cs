@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Sabresaurus.SabreCSG
 {
-	[ExecuteInEditMode]
-	public class StairBrush : CompoundBrush
-	{
+    [ExecuteInEditMode]
+    public class StairBrush : CompoundBrush
+    {
         /// <summary>
         /// The depth of each step.
         /// </summary>
@@ -25,7 +25,7 @@ namespace Sabresaurus.SabreCSG
         /// The height of each step.
         /// </summary>
         [SerializeField]
-	    float stepHeight = 0.1f;
+        float stepHeight = 0.1f;
 
         /// <summary>
         /// Gets or sets the height of each step.
@@ -61,7 +61,7 @@ namespace Sabresaurus.SabreCSG
         /// Whether to automatically determine the best step depth.
         /// </summary>
         [SerializeField]
-		bool autoDepth = false;
+        bool autoDepth = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to automatically determine the best step depth.
@@ -73,7 +73,7 @@ namespace Sabresaurus.SabreCSG
         /// Whether to automatically determine the best step height.
         /// </summary>
         [SerializeField]
-		bool autoHeight = false;
+        bool autoHeight = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to automatically determine the best step height.
@@ -85,7 +85,7 @@ namespace Sabresaurus.SabreCSG
         /// Whether to lead from the top.
         /// </summary>
         [SerializeField]
-		bool leadFromTop = false;
+        bool leadFromTop = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to lead from the top.
@@ -118,70 +118,70 @@ namespace Sabresaurus.SabreCSG
         }
 
         public override int BrushCount
-		{
-			get 
-			{
+        {
+            get
+            {
                 // Count the maximum number of steps in each dimension
                 int depthCount = 1 + Mathf.FloorToInt((localBounds.size.z - stepDepth + 0.001f) / (stepDepth + stepDepthSpacing));
                 int heightCount = 1 + Mathf.FloorToInt((localBounds.size.y - stepHeight + 0.001f) / (stepHeight + stepHeightSpacing));
 
                 // Return the smaller step count
                 return Mathf.Min(depthCount, heightCount);
-			}
-		}
+            }
+        }
 
-		public override void UpdateVisibility ()
-		{
-		}
+        public override void UpdateVisibility()
+        {
+        }
 
-		public override void Invalidate (bool polygonsChanged)
-		{
-			base.Invalidate(polygonsChanged);
+        public override void Invalidate(bool polygonsChanged)
+        {
+            base.Invalidate(polygonsChanged);
 
-			int brushCount = BrushCount;
-			float activeHeight = stepHeight;
-			float activeDepth = stepDepth;
+            int brushCount = BrushCount;
+            float activeHeight = stepHeight;
+            float activeDepth = stepDepth;
 
-			if(autoHeight)
-			{
-				activeHeight = localBounds.size.y / brushCount;
-			}
-			if(autoDepth)
-			{
-				activeDepth = localBounds.size.z / brushCount;
-			}
+            if (autoHeight)
+            {
+                activeHeight = localBounds.size.y / brushCount;
+            }
+            if (autoDepth)
+            {
+                activeDepth = localBounds.size.z / brushCount;
+            }
 
-			Vector3 stepSize = new Vector3(localBounds.size.x, activeHeight, activeDepth);
+            Vector3 stepSize = new Vector3(localBounds.size.x, activeHeight, activeDepth);
 
 
-			Vector3 startPosition = localBounds.center;
-			if(leadFromTop)
-			{
-				startPosition.y += stepSize.y/2f + localBounds.size.y/2f - stepSize.y * brushCount;
-				startPosition.z += stepSize.z/2f + localBounds.size.z/2f - stepSize.z * brushCount;
-			}
-			else
-			{
-				startPosition.y += stepSize.y/2f - localBounds.size.y/2f;
-				startPosition.z += stepSize.z/2f - localBounds.size.z/2f;				
-			}
-				
-			for (int i = 0; i < brushCount; i++) 
-			{
+            Vector3 startPosition = localBounds.center;
+            if (leadFromTop)
+            {
+                startPosition.y += stepSize.y / 2f + localBounds.size.y / 2f - stepSize.y * brushCount;
+                startPosition.z += stepSize.z / 2f + localBounds.size.z / 2f - stepSize.z * brushCount;
+            }
+            else
+            {
+                startPosition.y += stepSize.y / 2f - localBounds.size.y / 2f;
+                startPosition.z += stepSize.z / 2f - localBounds.size.z / 2f;
+            }
+
+            for (int i = 0; i < brushCount; i++)
+            {
                 Vector3 localPosition = startPosition + Vector3.forward * i * (activeDepth + stepDepthSpacing) + Vector3.up * i * (activeHeight + stepHeightSpacing) * (fillToBottom ? 0.5f : 1f);
                 generatedBrushes[i].transform.localPosition = localPosition;
 
-				generatedBrushes[i].Mode = this.Mode;
-				generatedBrushes[i].IsNoCSG = this.IsNoCSG;
-				generatedBrushes[i].IsVisible = this.IsVisible;
-				generatedBrushes[i].HasCollision = this.HasCollision;
-				BrushUtility.Resize(generatedBrushes[i], stepSize);
+                generatedBrushes[i].Mode = this.Mode;
+                generatedBrushes[i].IsNoCSG = this.IsNoCSG;
+                generatedBrushes[i].IsVisible = this.IsVisible;
+                generatedBrushes[i].HasCollision = this.HasCollision;
+                BrushUtility.Resize(generatedBrushes[i], stepSize);
 
                 if (fillToBottom)
                     stepSize.y += (activeHeight) + stepHeightSpacing;
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 #endif
