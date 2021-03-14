@@ -1,0 +1,16 @@
+{
+    "name": "SabreCSG",
+    "rootNamespace": "",
+    "references": [
+        "GUID:283dba6a99579534a9de307160ef8a62"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

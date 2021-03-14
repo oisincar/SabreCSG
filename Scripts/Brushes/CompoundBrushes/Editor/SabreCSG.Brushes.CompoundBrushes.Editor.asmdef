@@ -1,0 +1,19 @@
+{
+    "name": "SabreCSG.Brushes.CompoundBrushes.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:678a71de82543084180bbf61a6ba5dba",
+        "GUID:18237020887861828abefcedabfe6ea2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
