@@ -922,18 +922,25 @@ namespace Sabresaurus.SabreCSG
                         Debug.Log("Creating Edge");
 
                         var tmp = new List<Vector3>(vertices);
-                        GameObject line = new GameObject("TransitionLine");
                         // TODO: Add to local CSG object, but need to change what's loaded into play mode.
                         // This might be wrong with compound brushes idk.
-                        var meshgroup = targetBrushes[0].transform.parent.Find("MeshGroup");
-                        line.transform.parent = meshgroup;
-                        var ed = line.AddComponent<Environment.Alignable>();
+                        var csg = targetBrushes[0].GetCSGModel();
+                        var meshgroup = csg.transform.Find("MeshGroup");
+                        var ground = meshgroup.GetComponent<Environment.Ground>();
 
-                        Vector3 ave = (tmp[0] + tmp[1]) / 2;
-                        line.transform.position = ave;
+                        if (ground == null) {
+                            Debug.Log("Cannot create TL; try assign 'ground' component to MeshGroup");
+                        }
+                        else {
+                            GameObject line = new GameObject("TransitionLine");
 
-                        ed.p1 = tmp[0] - ave;
-                        ed.p2 = tmp[1] - ave;
+                            Vector3 ave = (tmp[0] + tmp[1]) / 2;
+                            line.transform.position = ave;
+                            // TODO: Add to some 'folder'.. or something.
+                            // line.transform.parent = meshgroup;
+                            var ed = line.AddComponent<Environment.Alignable>();
+                            ed.Initilize(ground, tmp[0] - ave, tmp[1] - ave);
+                        }
                     }
 				}
 			}
