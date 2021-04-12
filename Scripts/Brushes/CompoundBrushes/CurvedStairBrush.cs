@@ -149,7 +149,7 @@ namespace Sabresaurus.SabreCSG
             m_LastKnownPosition = transform.localPosition;
         }
 
-        public override int BrushCount 
+        public override int BrushCount
 		{
 			get
 			{
