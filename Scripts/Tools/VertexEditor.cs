@@ -926,7 +926,7 @@ namespace Sabresaurus.SabreCSG
                         // This might be wrong with compound brushes idk.
                         var csg = targetBrushes[0].GetCSGModel();
                         var meshgroup = csg.transform.Find("MeshGroup");
-                        var ground = meshgroup.GetComponent<Environment.Ground>();
+                        var ground = meshgroup.GetComponent<Environment.TerrainRoot>();
 
                         if (ground == null) {
                             Debug.Log("Cannot create TL; try assign 'ground' component to MeshGroup");

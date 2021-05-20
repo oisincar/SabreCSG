@@ -266,7 +266,7 @@ namespace Sabresaurus.SabreCSG
 			{
 				// Walk through all the types in the main assembly
 				if(assembly.FullName.StartsWith("Assembly-CSharp")
-                   || assembly.FullName.StartsWith("WL.Scripts"))
+                   || assembly.FullName.StartsWith("WL"))
 				{
 					Type[] types = assembly.GetTypes();
 
