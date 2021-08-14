@@ -1372,7 +1372,7 @@ namespace Sabresaurus.SabreCSG
                 if (anyCSGModelsInEditMode)
                 {
                     editModeModel = GetActiveCSGModel();
-                    UpdateAllBrushesVisibility(); 
+                    UpdateAllBrushesVisibility();
                 }
             }
 #endif
@@ -2103,21 +2103,42 @@ namespace Sabresaurus.SabreCSG
                 meshGroup.SetParent(csgModelTransform.parent, true);
             }
 
-            // find all built volumes:
-            Transform[] volumes = csgModelTransform.FindChildren(Constants.GameObjectVolumeComponentIdentifier);
-            for (int i = 0; i < volumes.Length; i++)
-            {
-                // make sure they are visible and editable again.
-                volumes[i].gameObject.hideFlags = HideFlags.None;
-                // give them a more recognizable name.
-                volumes[i].name = volumes[i].parent.name.Replace(" Brush ", " Volume ");
-                if (meshGroup != null)
-                    // Reanchor the volumes to the mesh group.
-                    volumes[i].SetParent(meshGroup, true);
-                else
-                    // Reanchor the volumes to the parent of the CSG Model
-                    volumes[i].SetParent(csgModelTransform.parent, true);
+            // Go through every child, remove brushes, keep rest by reparenting em to meshGroup
+            foreach (Transform g in csgModelTransform.GetComponentsInChildren<Transform>()) {
+                // Ignore meshgroup itself!
+                if (g == csgModelTransform || g == meshGroup || g.parent == meshGroup) {
+                    continue;
+                }
+
+                if (g.GetComponent<BrushBase>() != null) {
+                    // Component is brush, delete it soon!
+                    g.SetParent(csgModelTransform);
+                }
+                else if (g.parent == csgModelTransform || g.parent.GetComponent<BrushBase>() != null) {
+                    // Component is not a brush. We should change its parent only if we won't 'save'
+                    // its parent already.
+                    g.SetParent(meshGroup);
+                }
             }
+
+            // Name meshGroup something better...
+            meshGroup.name = $"{csgModelTransform.name}_meshgroup";
+
+            // // find all built volumes:
+            // Transform[] volumes = csgModelTransform.FindChildren(Constants.GameObjectVolumeComponentIdentifier);
+            // for (int i = 0; i < volumes.Length; i++)
+            // {
+            //     // make sure they are visible and editable again.
+            //     volumes[i].gameObject.hideFlags = HideFlags.None;
+            //     // give them a more recognizable name.
+            //     volumes[i].name = volumes[i].parent.name.Replace(" Brush ", " Volume ");
+            //     if (meshGroup != null)
+            //         // Reanchor the volumes to the mesh group.
+            //         volumes[i].SetParent(meshGroup, true);
+            //     else
+            //         // Reanchor the volumes to the parent of the CSG Model
+            //         volumes[i].SetParent(csgModelTransform.parent, true);
+            // }
 
             // Remove the CSG Model and its brushes
             DestroyImmediate(csgModelTransform.gameObject);
