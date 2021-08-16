@@ -915,9 +915,6 @@ namespace Sabresaurus.SabreCSG
 
 					ClearSelection();
 
-                    foreach (var v in vertices) {
-                        Debug.Log(v);
-                    }
                     if (vertices.Count == 2) {
                         Debug.Log("Creating Edge");
 
@@ -936,10 +933,17 @@ namespace Sabresaurus.SabreCSG
 
                             Vector3 ave = (tmp[0] + tmp[1]) / 2;
                             line.transform.position = ave;
-                            // TODO: Add to some 'folder'.. or something.
-                            // line.transform.parent = meshgroup;
                             var ed = line.AddComponent<Environment.Alignable>();
                             ed.Initilize(ground, tmp[0] - ave, tmp[1] - ave);
+
+                            // Create a folder for em if there isn't one already...
+                            var parent = csg.transform.Find("Alignables");
+                            if (!parent) {
+                                parent = new GameObject("Alignables").transform;
+                                parent.parent = csg.transform;
+                            }
+
+                            line.transform.SetParent(parent, true);
                         }
                     }
 				}
