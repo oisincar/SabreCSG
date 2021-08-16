@@ -1092,8 +1092,11 @@ namespace Sabresaurus.SabreCSG
                     {
                         csgModel = parentCSGModels[0];
 
-                        if (Selection.gameObjects[i].GetComponent<MeshFilter>() != null
-                            || Selection.gameObjects[i].GetComponent<MeshCollider>() != null)
+
+                        // Only show selection for brushes
+                        if (Selection.gameObjects[i].GetComponent<BrushBase>() == null)
+                        // if (Selection.gameObjects[i].GetComponent<MeshFilter>() != null
+                        //     || Selection.gameObjects[i].GetComponent<MeshCollider>() != null)
                         {
                             anyNonCSGSelected = true;
                         }
