@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 
 namespace Sabresaurus.SabreCSG
@@ -925,16 +926,24 @@ namespace Sabresaurus.SabreCSG
                         var meshgroup = csg.transform.Find("MeshGroup");
                         var ground = meshgroup.GetComponent<Environment.TerrainRoot>();
 
+                        Vector3 ave = (tmp[0] + tmp[1]) / 2;
+                        Vector3 p1 = tmp[0] - ave;
+                        Vector3 p2 = tmp[1] - ave;
+
                         if (ground == null) {
-                            Debug.Log("Cannot create TL; try assign 'ground' component to MeshGroup");
+                            Debug.LogError("Cannot create TL; try assign 'ground' component to MeshGroup");
+                        }
+                        // Check if we've already made one that's identical!
+                        else if (csg.transform.GetComponentsInChildren<Environment.Alignable>()
+                            .Any(a => a.IsEquilivent(ground, ave, p1, p2))) {
+                            Debug.LogError("Could not create alignable, another already exists!");
                         }
                         else {
                             GameObject line = new GameObject("TransitionLine");
 
-                            Vector3 ave = (tmp[0] + tmp[1]) / 2;
                             line.transform.position = ave;
                             var ed = line.AddComponent<Environment.Alignable>();
-                            ed.Initilize(ground, tmp[0] - ave, tmp[1] - ave);
+                            ed.Initilize(ground, p1, p2);
 
                             // Create a folder for em if there isn't one already...
                             var parent = csg.transform.Find("Alignables");
