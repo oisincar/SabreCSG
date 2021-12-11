@@ -108,9 +108,11 @@ namespace Sabresaurus.SabreCSG
 
 			style = new GUIStyle(EditorStyles.toolbar);
 
+#if !UNITY_2021_2_OR_NEWER  // Displayed in a toolbar in unity >= 2021_2
 			style.normal.background = SabreCSGResources.ClearTexture;
 			rectangle = new Rect(0, 20, 320, 50);
 			GUILayout.Window(140004, rectangle, OnTopToolbarGUI, "", style);
+#endif
 
 			if(!string.IsNullOrEmpty(warningMessage))
 			{				
