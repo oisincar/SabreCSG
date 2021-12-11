@@ -309,6 +309,11 @@ namespace Sabresaurus.SabreCSG
             }
             Event e = Event.current;
 
+#if UNITY_2021_2_OR_NEWER
+            if (SabreToolbarOverlay.Instance != null) SabreToolbarOverlay.Instance.displayed = EditMode;
+            if (SabreToolsOverlay.Instance != null) SabreToolsOverlay.Instance.displayed = EditMode;
+#endif
+
             if (!EditMode)
             {
                 return;
@@ -1041,7 +1046,7 @@ namespace Sabresaurus.SabreCSG
 #else
                 if (PrefabUtility.GetPrefabParent(Selection.gameObjects[i]) == null
 #endif
-#if !UNITY_2018_3
+#if !UNITY_2018_3_OR_NEWER
 					&& PrefabUtility.GetPrefabObject(Selection.gameObjects[i].transform) != null)
 #else
 					&& PrefabUtility.GetPrefabInstanceHandle(Selection.gameObjects[i].transform) != null)
@@ -1357,8 +1362,10 @@ namespace Sabresaurus.SabreCSG
                 // Then resubscribe and repaint
                 isSubscribedToDuringSceneGui = true;
 #if UNITY_2019_1_OR_NEWER
+                SceneView.duringSceneGui -= OnSceneGUI;
                 SceneView.duringSceneGui += OnSceneGUI;
 #else
+                SceneView.onSceneGUIDelegate -= OnSceneGUI;
                 SceneView.onSceneGUIDelegate += OnSceneGUI;
 #endif
                 SceneView.RepaintAll();
