@@ -75,7 +75,7 @@ namespace Sabresaurus.SabreCSG
         private bool inverseSnapSelectionToCurrentGridLogic = false;
 
         private bool preventBrushSelection = false;
-        public override bool PreventBrushSelection 
+        public override bool PreventBrushSelection
         {
             get {
                 return preventBrushSelection;
@@ -783,7 +783,7 @@ namespace Sabresaurus.SabreCSG
 
             marqueeStart = e.mousePosition;
 
-            if (EditorHelper.IsMousePositionInInvalidRects(e.mousePosition) || 
+            if (EditorHelper.IsMousePositionInInvalidRects(e.mousePosition) ||
                 (primaryTargetBrush != null && EditorHelper.IsMousePositionInIMGUIRect(e.mousePosition, brushMenuRect)))
             {
                 marqueeCancelled = true;
@@ -869,7 +869,7 @@ namespace Sabresaurus.SabreCSG
             {
                 direction = -direction;
             }
-            
+
             Vector3 deltaWorld = (currentPositionWorld - lastPositionWorld);
             // Rescaling logic deals with local space changes, convert to that space
             Vector3 deltaLocal = InverseTransformDirection(deltaWorld);
@@ -906,7 +906,7 @@ namespace Sabresaurus.SabreCSG
                     // with this extra offset we will "re-snap" the face to the current grid
                     snapDistanceOffset = offsetReferencePoint - snappedOffsetReferencePoint;
                 }
-                
+
                 // Snapping's dot uses an offset to track deltas that would be lost otherwise due to snapping
                 translationDelta += translationDeltaSnappingOffset;
 
@@ -1301,17 +1301,17 @@ namespace Sabresaurus.SabreCSG
             style.fixedHeight = rectangle.height;
 
             brushMenuRect = new Rect(
-                0, 
-                (sceneView.position.height - Toolbar.bottomToolbarHeight) - BRUSH_MENU_HEIGHT, 
+                0,
+                (sceneView.position.height - Toolbar.bottomToolbarHeight) - BRUSH_MENU_HEIGHT,
                 BRUSH_MENU_WIDTH,
                 BRUSH_MENU_HEIGHT
             );
 
-#if UNITY_2021_2_OR_NEWER
-            SabreToolsOverlay.window1 = () => OnTopToolbarGUI(0);
-#else
-            GUILayout.Window(140007, rectangle, OnTopToolbarGUI, "", style);
-#endif
+// #if UNITY_2021_2_OR_NEWER
+//             SabreToolsOverlay.window1 = () => OnTopToolbarGUI(0);
+// #else
+            // GUILayout.Window(140007, rectangle, OnTopToolbarGUI, "", style);
+// #endif
 
             if (primaryTargetBrush != null)
             {
@@ -1321,11 +1321,11 @@ namespace Sabresaurus.SabreCSG
                 style = new GUIStyle(EditorStyles.toolbar);
                 style.fixedWidth = BRUSH_MENU_WIDTH;
                 style.fixedHeight = BRUSH_MENU_HEIGHT;
-#if UNITY_2021_2_OR_NEWER
-                SabreToolsOverlay.window2 = () => OnBrushSettingsGUI(0);
-#else
-                GUILayout.Window(140011, brushMenuRect, OnBrushSettingsGUI, "", style);
-#endif
+// #if UNITY_2021_2_OR_NEWER
+//                 SabreToolsOverlay.window2 = () => OnBrushSettingsGUI(0);
+// #else
+                // GUILayout.Window(140011, brushMenuRect, OnBrushSettingsGUI, "", style);
+// #endif
             }
         }
 
@@ -1360,12 +1360,12 @@ namespace Sabresaurus.SabreCSG
 			}
 			int currentModeIndex = System.Array.IndexOf(brushModeSettings, currentBrushMode);
 
-			string brushMode = brushModeSettings[EditorGUILayout.Popup("", currentModeIndex, brushModeSettings, GUILayout.Width(60))]; 
+			string brushMode = brushModeSettings[EditorGUILayout.Popup("", currentModeIndex, brushModeSettings, GUILayout.Width(60))];
 			if(brushMode != currentBrushMode)
 			{
 				bool anyChanged = false;
 
-				foreach (BrushBase brush in targetBrushBases) 
+				foreach (BrushBase brush in targetBrushBases)
 				{
 					Undo.RecordObject(brush, "Change Brush To " + brushMode);
 
@@ -1384,7 +1384,7 @@ namespace Sabresaurus.SabreCSG
 							break;
 						case "NoCSG":
 							// Volume overrides NoCSG, so it must be changed if you select NoCSG
-							if (brush.Mode == CSGMode.Volume) { 
+							if (brush.Mode == CSGMode.Volume) {
 								brush.Mode = CSGMode.Add;
 							}
 							brush.IsNoCSG = true;
@@ -1397,7 +1397,7 @@ namespace Sabresaurus.SabreCSG
 					// Need to update the icon for the csg mode in the hierarchy
 					EditorApplication.RepaintHierarchyWindow();
 
-					foreach (BrushBase b in targetBrushBases) 
+					foreach (BrushBase b in targetBrushBases)
 					{
 						b.Invalidate(true);
 					}
@@ -1412,7 +1412,7 @@ namespace Sabresaurus.SabreCSG
 			// TODO: If the brushes are all volumes, the collision and visible checkboxes should be disabled
 
 			// bool allVolumes = true;
-			// foreach (BrushBase brush in selectedBrushes) 
+			// foreach (BrushBase brush in selectedBrushes)
 			// {
 			// 	if (brush.Mode != CSGMode.Volume) {
 			// 		allVolumes = false;
@@ -1423,13 +1423,13 @@ namespace Sabresaurus.SabreCSG
 
 			if(newHasCollision != hasCollision)
 			{
-				foreach (BrushBase brush in targetBrushBases) 
+				foreach (BrushBase brush in targetBrushBases)
 				{
 					Undo.RecordObject(brush, "Change Brush Collision Mode");
 					brush.HasCollision = newHasCollision;
 				}
 				// Tell the brushes that they have changed and need to recalc intersections
-				foreach (BrushBase brush in targetBrushBases) 
+				foreach (BrushBase brush in targetBrushBases)
 				{
 					brush.Invalidate(true);
 				}
@@ -1442,13 +1442,13 @@ namespace Sabresaurus.SabreCSG
 
 			if(newIsVisible != isVisible)
 			{
-				foreach (BrushBase brush in targetBrushBases) 
+				foreach (BrushBase brush in targetBrushBases)
 				{
 					Undo.RecordObject(brush, "Change Brush Visible Mode");
 					brush.IsVisible = newIsVisible;
 				}
 				// Tell the brushes that they have changed and need to recalc intersections
-				foreach (BrushBase brush in targetBrushBases) 
+				foreach (BrushBase brush in targetBrushBases)
 				{
 					brush.Invalidate(true);
 				}
@@ -1476,9 +1476,9 @@ namespace Sabresaurus.SabreCSG
             {
                 flipIndex = 2;
             }
-			
+
 			if (flipIndex != -1)
-            {	
+            {
                 Undo.RecordObjects(targetBrushBases.ToArray(), "Flip Polygons");
 
                 bool localToPrimaryBrush = (Tools.pivotRotation == PivotRotation.Local);

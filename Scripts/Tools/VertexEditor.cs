@@ -1067,11 +1067,11 @@ namespace Sabresaurus.SabreCSG
             GUIStyle toolbar = new GUIStyle(EditorStyles.toolbar);
 			toolbar.normal.background = SabreCSGResources.ClearTexture;
 			toolbar.fixedHeight = rectangle.height;
-#if UNITY_2021_2_OR_NEWER
-			SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
-#else
+// #if UNITY_2021_2_OR_NEWER
+// 			SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
+// #else
 			GUILayout.Window(140002, rectangle, OnToolbarGUI, "", toolbar);
-#endif
+// #endif
 		}
 
 		void OnMouseDown (SceneView sceneView, Event e)

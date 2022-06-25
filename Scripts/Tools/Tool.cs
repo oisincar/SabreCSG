@@ -35,7 +35,7 @@ namespace Sabresaurus.SabreCSG
 			// Find the selected brush bases
 			List<BrushBase> brushBases = new List<BrushBase>();
 
-			for (int i = 0; i < Selection.gameObjects.Length; i++) 
+			for (int i = 0; i < Selection.gameObjects.Length; i++)
 			{
 				BrushBase matchedBrushBase = Selection.gameObjects[i].GetComponent<BrushBase>();
 
@@ -44,7 +44,7 @@ namespace Sabresaurus.SabreCSG
 #if UNITY_2018_2_OR_NEWER
 						&& !(PrefabUtility.GetCorrespondingObjectFromSource(matchedBrushBase.gameObject) == null
 #else
-						&& !(PrefabUtility.GetPrefabParent(matchedBrushBase.gameObject) == null 
+						&& !(PrefabUtility.GetPrefabParent(matchedBrushBase.gameObject) == null
 #endif
 #if !UNITY_2018_3_OR_NEWER
 							&& PrefabUtility.GetPrefabObject(matchedBrushBase.transform) != null))
@@ -107,7 +107,7 @@ namespace Sabresaurus.SabreCSG
 				targetBrushBases = brushBasesArray;
 				targetBrushes = primitiveBrushes;
 				targetBrushTransforms = new Transform[brushBasesArray.Length];
-				for (int i = 0; i < brushBasesArray.Length; i++) 
+				for (int i = 0; i < brushBasesArray.Length; i++)
 				{
 					if(brushBasesArray[i] != null)
 					{
@@ -122,7 +122,7 @@ namespace Sabresaurus.SabreCSG
 		}
 
 
-		// Calculate the bounds for all selected brushes, respecting the current pivotRotation mode to produce 
+		// Calculate the bounds for all selected brushes, respecting the current pivotRotation mode to produce
 		// bounds aligned to the first selected brush in Local mode, or bounds aligned to the absolute grid in Global
 		// mode.
 		public Bounds GetBounds()
@@ -133,7 +133,7 @@ namespace Sabresaurus.SabreCSG
 			{
 				bounds = primaryTargetBrushBase.GetBounds();
 
-				for (int i = 0; i < targetBrushBases.Length; i++) 
+				for (int i = 0; i < targetBrushBases.Length; i++)
 				{
 					if(targetBrushBases[i] != primaryTargetBrushBase)
 					{
@@ -144,7 +144,7 @@ namespace Sabresaurus.SabreCSG
 			else // Absolute/Global
 			{
 				bounds = primaryTargetBrushBase.GetBoundsTransformed();
-				for (int i = 0; i < targetBrushBases.Length; i++) 
+				for (int i = 0; i < targetBrushBases.Length; i++)
 				{
 					if(targetBrushBases[i] != primaryTargetBrushBase)
 					{
@@ -161,7 +161,7 @@ namespace Sabresaurus.SabreCSG
 		{
 			if(Tools.pivotRotation == PivotRotation.Local)
 			{
-				return primaryTargetBrushTransform.TransformPoint(point);	
+				return primaryTargetBrushTransform.TransformPoint(point);
 			}
 			else
 			{
@@ -174,7 +174,7 @@ namespace Sabresaurus.SabreCSG
 		{
 			if(Tools.pivotRotation == PivotRotation.Local)
 			{
-				return primaryTargetBrushTransform.InverseTransformDirection(direction);	
+				return primaryTargetBrushTransform.InverseTransformDirection(direction);
 			}
 			else
 			{
@@ -187,7 +187,7 @@ namespace Sabresaurus.SabreCSG
 		{
 			if(Tools.pivotRotation == PivotRotation.Local)
 			{
-				return primaryTargetBrushTransform.TransformDirection(direction);	
+				return primaryTargetBrushTransform.TransformDirection(direction);
 			}
 			else
 			{
@@ -260,10 +260,10 @@ namespace Sabresaurus.SabreCSG
 
 		public virtual void Deactivated()
         {
-#if UNITY_2021_2_OR_NEWER
-			SabreToolsOverlay.window1 = null;
-			SabreToolsOverlay.window2 = null;
-#endif
+// #if UNITY_2021_2_OR_NEWER
+// 			SabreToolsOverlay.window1 = null;
+// 			SabreToolsOverlay.window2 = null;
+// #endif
 		}
 
 		public virtual bool BrushesHandleDrawing

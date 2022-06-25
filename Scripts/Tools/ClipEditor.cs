@@ -54,26 +54,26 @@ namespace Sabresaurus.SabreCSG
         public override void OnSceneGUI(SceneView sceneView, Event e)
         {
 			base.OnSceneGUI(sceneView, e); // Allow the base logic to calculate first
-			
+
 			// If any points are selected let the handles move them
 			if(pointSelected > -1)
 			{
 				EditorGUI.BeginChangeCheck();
 				// Display a handle and allow the user to determine a new position in world space
 				Vector3 newWorldPosition = Handles.PositionHandle(points[pointSelected], Quaternion.identity);
-				
+
 				if(EditorGUI.EndChangeCheck())
 				{
 					Vector3 newPosition = newWorldPosition;
-					
+
 					Vector3 accumulatedDelta = newPosition - startPosition;
-					
+
 					if(CurrentSettings.PositionSnappingEnabled)
 					{
 						float snapDistance = CurrentSettings.PositionSnapDistance;
 						accumulatedDelta = MathHelper.RoundVector3(accumulatedDelta, snapDistance);
 					}
-					
+
 					newPosition = startPosition + accumulatedDelta;
 
 					points[pointSelected] = newPosition;
@@ -93,8 +93,8 @@ namespace Sabresaurus.SabreCSG
 				}
 			}
 
-			if(e.button == 0 
-                && e.type == EventType.MouseDrag 
+			if(e.button == 0
+                && e.type == EventType.MouseDrag
                 && !CameraPanInProgress
                 && isDragValid)
 			{
@@ -147,18 +147,18 @@ namespace Sabresaurus.SabreCSG
 				return;
 			}
 
-			pointSelected = -1; 
+			pointSelected = -1;
 
 			if(planeEstablished)
 			{
 //				Vector3 sceneViewPosition = sceneView.camera.transform.position;
-				
+
 				Vector2 mousePosition = e.mousePosition;
 
-				for (int i = 0; i < points.Length; i++) 
+				for (int i = 0; i < points.Length; i++)
 				{
 //					float vertexDistanceSquare = (sceneViewPosition - points[i]).sqrMagnitude;
-					
+
 					if(EditorHelper.InClickZone(mousePosition, points[i]))
 					{
 						if(e.type == EventType.MouseUp)
@@ -181,7 +181,7 @@ namespace Sabresaurus.SabreCSG
 
 			Vector2 mousePosition = e.mousePosition;
 			mousePosition = EditorHelper.ConvertMousePointPosition(mousePosition);
-			
+
 			Ray ray = Camera.current.ScreenPointToRay(mousePosition);
 
 			Plane plane = new Plane(sceneView.camera.transform.forward, primaryTargetBrushTransform.position);
@@ -195,7 +195,7 @@ namespace Sabresaurus.SabreCSG
 			{
 				return;
 			}
-				
+
 			if(e.type == EventType.MouseDown || e.type == EventType.MouseMove)
 			{
 				if(e.type == EventType.MouseMove && planeEstablished)
@@ -211,16 +211,16 @@ namespace Sabresaurus.SabreCSG
 					float snapDistance = CurrentSettings.PositionSnapDistance;
 					points[0] = MathHelper.RoundVector3(points[0], snapDistance);
 				}
-				
+
 				points[1] = points[0];
 				points[2] = points[0];
-				
+
 				isFlipped = false;
 			}
 			else
 			{
 				points[1] = worldPoint;
-				
+
 				if(CurrentSettings.PositionSnappingEnabled)
 				{
 					float snapDistance = CurrentSettings.PositionSnapDistance;
@@ -250,14 +250,14 @@ namespace Sabresaurus.SabreCSG
 
 			Vector2 mousePosition = e.mousePosition;
 			mousePosition = EditorHelper.ConvertMousePointPosition(mousePosition);
-			
+
 			Ray ray = Camera.current.ScreenPointToRay(mousePosition);
 			float bestDistance = float.PositiveInfinity;
 
 			Polygon bestPolygon = null;
 
 			float testDistance;
-			foreach (Brush brush in targetBrushes) 
+			foreach (Brush brush in targetBrushes)
 			{
 				List<Polygon> polygons = brush.GenerateTransformedPolygons().ToList();
 				Polygon testPolygon = GeometryHelper.RaycastPolygons(polygons, ray, out testDistance, 0.1f);
@@ -320,7 +320,7 @@ namespace Sabresaurus.SabreCSG
 			}
 
 		}
-			
+
 		void OnKeyAction(SceneView sceneView, Event e)
         {
 			if (KeyMappings.EventsMatch(e, Event.KeyboardEvent(KeyMappings.Instance.ApplyClip)))
@@ -393,10 +393,10 @@ namespace Sabresaurus.SabreCSG
 					GL.Begin(GL.LINES);
 					GL.Color(Color.black);
 
-					foreach (PrimitiveBrush brush in targetBrushes) 
+					foreach (PrimitiveBrush brush in targetBrushes)
 					{
 						Polygon[] polygons = brush.GenerateTransformedPolygons();
-						foreach (Polygon polygon in polygons) 
+						foreach (Polygon polygon in polygons)
 						{
 							Vector3 position1;
 							Vector3 position2;
@@ -414,20 +414,20 @@ namespace Sabresaurus.SabreCSG
 				if(displayPoint)
 				{
 					Camera sceneViewCamera = sceneView.camera;
-				
+
 					SabreCSGResources.GetVertexMaterial().SetPass (0);
 					GL.PushMatrix();
 					GL.LoadPixelMatrix();
-						
+
 					GL.Begin(GL.QUADS);
 
-					
+
 					// Draw points in reverse order because we want the precedence to be Red, Green, Blue
-					
+
 					GL.Color(Color.blue);
-					
+
 					Vector3 target = sceneViewCamera.WorldToScreenPoint(points[2]);
-					
+
 					if(target.z > 0)
 					{
 						// Make it pixel perfect
@@ -436,9 +436,9 @@ namespace Sabresaurus.SabreCSG
 					}
 
 					GL.Color(Color.green);
-					
+
 					target = sceneViewCamera.WorldToScreenPoint(points[1]);
-					
+
 					if(target.z > 0)
 					{
 						// Make it pixel perfect
@@ -447,9 +447,9 @@ namespace Sabresaurus.SabreCSG
 					}
 
 					GL.Color(Color.red);
-					
+
 					target = sceneViewCamera.WorldToScreenPoint(points[0]);
-					
+
 					if(target.z > 0)
 					{
 						// Make it pixel perfect
@@ -468,11 +468,11 @@ namespace Sabresaurus.SabreCSG
 			GUIStyle toolbar = new GUIStyle(EditorStyles.toolbar);
 			toolbar.normal.background = SabreCSGResources.ClearTexture;
 			toolbar.fixedHeight = rectangle.height;
-#if UNITY_2021_2_OR_NEWER
-			SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
-#else
+// #if UNITY_2021_2_OR_NEWER
+// 			SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
+// #else
 			GUILayout.Window(140006, rectangle, OnToolbarGUI, "",toolbar);
-#endif
+// #endif
 		}
 
         void OnToolbarGUI(int windowID)
@@ -481,7 +481,7 @@ namespace Sabresaurus.SabreCSG
             EditorGUILayout.BeginHorizontal();
 
 			if (SabreGUILayout.Button("Clip"))
-            {                
+            {
                 ApplyClipPlane(false);
             }
 
@@ -491,7 +491,7 @@ namespace Sabresaurus.SabreCSG
 			}
 
 			if (SabreGUILayout.Button("Edge Loop"))
-			{                
+			{
 				InsertEdgeLoop();
 			}
 
@@ -533,7 +533,7 @@ namespace Sabresaurus.SabreCSG
         void ApplyClipPlane(bool keepBothSides)
         {
 			List<Object> newObjects = new List<Object>();
-			foreach (PrimitiveBrush brush in targetBrushes) 
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				if(brush != null)
 				{
@@ -544,13 +544,13 @@ namespace Sabresaurus.SabreCSG
 					if(isFlipped)
 					{
 						localClipPlane = new Plane(brush.transform.InverseTransformPoint(points[0]),
-							brush.transform.InverseTransformPoint(points[1]), 
+							brush.transform.InverseTransformPoint(points[1]),
 							brush.transform.InverseTransformPoint(points[2]));
 					}
 					else
 					{
 						localClipPlane = new Plane(brush.transform.InverseTransformPoint(points[2]),
-							brush.transform.InverseTransformPoint(points[1]), 
+							brush.transform.InverseTransformPoint(points[1]),
 							brush.transform.InverseTransformPoint(points[0]));
 					}
 
@@ -588,7 +588,7 @@ namespace Sabresaurus.SabreCSG
 
 		void InsertEdgeLoop()
 		{
-			foreach (PrimitiveBrush brush in targetBrushes) 
+			foreach (PrimitiveBrush brush in targetBrushes)
 			{
 				if(brush != null)
 				{
@@ -596,7 +596,7 @@ namespace Sabresaurus.SabreCSG
 
 					// Recalculate the clip plane from the world points, converting to local space for this transform
 					Plane localClipPlane = new Plane(brush.transform.InverseTransformPoint(points[2]),
-						brush.transform.InverseTransformPoint(points[1]), 
+						brush.transform.InverseTransformPoint(points[1]),
 						brush.transform.InverseTransformPoint(points[0]));
 
 					ClipUtility.InsertEdgeLoop(brush, localClipPlane);

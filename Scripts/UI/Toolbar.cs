@@ -83,8 +83,8 @@ namespace Sabresaurus.SabreCSG
 			if (primitiveMenuShowing) {
 				style = new GUIStyle(EditorStyles.toolbar);
 				primitiveMenuRect = new Rect(
-					0, 
-					(sceneView.position.height - bottomToolbarHeight) - PRIMITIVE_MENU_HEIGHT, 
+					0,
+					(sceneView.position.height - bottomToolbarHeight) - PRIMITIVE_MENU_HEIGHT,
 					PRIMITIVE_MENU_WIDTH,
 					PRIMITIVE_MENU_HEIGHT
 				);
@@ -96,8 +96,8 @@ namespace Sabresaurus.SabreCSG
 			if (viewMenuShowing) {
 				style = new GUIStyle(EditorStyles.toolbar);
 				viewMenuRect = new Rect(
-					sceneView.position.width - VIEW_MENU_WIDTH, 
-					(sceneView.position.height - bottomToolbarHeight) - VIEW_MENU_HEIGHT, 
+					sceneView.position.width - VIEW_MENU_WIDTH,
+					(sceneView.position.height - bottomToolbarHeight) - VIEW_MENU_HEIGHT,
 					VIEW_MENU_WIDTH,
 					VIEW_MENU_HEIGHT
 				);
@@ -108,19 +108,19 @@ namespace Sabresaurus.SabreCSG
 
 			style = new GUIStyle(EditorStyles.toolbar);
 
-#if !UNITY_2021_2_OR_NEWER  // Displayed in a toolbar in unity >= 2021_2
+// #if !UNITY_2021_2_OR_NEWER  // Displayed in a toolbar in unity >= 2021_2
 			style.normal.background = SabreCSGResources.ClearTexture;
 			rectangle = new Rect(0, 20, 320, 50);
 			GUILayout.Window(140004, rectangle, OnTopToolbarGUI, "", style);
-#endif
+// #endif
 
 			if(!string.IsNullOrEmpty(warningMessage))
-			{				
+			{
 				style.fixedHeight = 70;
 				rectangle = new Rect(0, sceneView.position.height - bottomToolbarHeight - style.fixedHeight, sceneView.position.width, style.fixedHeight);
 				GUILayout.Window(140005, rectangle, OnWarningToolbar, "", style);
 			}
-            
+
         }
 
         public static void OnTopToolbarGUI(int windowID)
@@ -165,7 +165,7 @@ namespace Sabresaurus.SabreCSG
 				}
 			}
 			*/
-			
+
 			EditorGUILayout.EndHorizontal();
         }
 
@@ -240,9 +240,9 @@ namespace Sabresaurus.SabreCSG
         static Plane GetActivePlane()
         {
             SceneView activeSceneView = SceneView.lastActiveSceneView;
-            if (activeSceneView != null 
-                && activeSceneView.camera != null 
-                && activeSceneView.camera.orthographic 
+            if (activeSceneView != null
+                && activeSceneView.camera != null
+                && activeSceneView.camera.orthographic
                 && EditorHelper.GetSceneViewCamera(activeSceneView.camera) != EditorHelper.SceneViewCamera.Other)
             {
                 // Axis aligned iso view
@@ -259,7 +259,7 @@ namespace Sabresaurus.SabreCSG
 		{
 			Vector3 position = GetPositionForNewBrush();
 			GameObject newBrushObject = csgModel.CreateBrush(
-				brushType, 
+				brushType,
 				position,
 				Vector3.one * CurrentSettings.PositionSnapDistance * 2f
 			);
@@ -273,7 +273,7 @@ namespace Sabresaurus.SabreCSG
 		static void CreateCompoundBrush(object compoundBrushType)
 		{
 			// Make sure we're actually being asked to create a compound brush
-			if(compoundBrushType != null 
+			if(compoundBrushType != null
 				&& compoundBrushType is Type
 				&& !typeof(CompoundBrush).IsAssignableFrom((Type)compoundBrushType))
 			{
@@ -481,7 +481,7 @@ namespace Sabresaurus.SabreCSG
                 CreateCompoundBrush<StairBrush>();
 				primitiveMenuShowing = false;
             }
-			
+
             if (GUILayout.Button(SabreCSGResources.ButtonCurvedStairsTexture, createBrushStyle))
             {
                 CreateCompoundBrush<CurvedStairBrush>();
@@ -514,25 +514,25 @@ namespace Sabresaurus.SabreCSG
 				GenericMenu menu = new GenericMenu ();
 
 				List<Type> compoundBrushTypes = CompoundBrush.FindAllInAssembly();
-				for (int i = 0; i < compoundBrushTypes.Count; i++) 
+				for (int i = 0; i < compoundBrushTypes.Count; i++)
 				{
                     int j = i; // Closure causes "i" to be "2" in the lambda expression unless we assign it to a scoped variable.
 					menu.AddItem (
-						new GUIContent (compoundBrushTypes[i].Name), 
-						false, 
+						new GUIContent (compoundBrushTypes[i].Name),
+						false,
 						() => {
 							CreateCompoundBrush(compoundBrushTypes[j]);
 							primitiveMenuShowing = false;
-						} 
+						}
 					);
 				}
 
                 menu.AddSeparator("");
-                
+
                 menu.AddItem(
-					new GUIContent("Add More?"), 
-					false, 
-					() => { 
+					new GUIContent("Add More?"),
+					false,
+					() => {
 						EditorUtility.DisplayDialog("SabreCSG - About Compound Brushes", "Any custom compound brushes in your project are automatically detected and added to this list. Simply inherit from 'Sabresaurus.SabreCSG.CompoundBrush'.", "Okay");
 						primitiveMenuShowing = false;
 					}
@@ -582,7 +582,7 @@ namespace Sabresaurus.SabreCSG
 #else
             EditorGUILayout.Space();
 #endif
-            
+
 			if (showToolbarOnTwoLines) {
 				GUILayout.FlexibleSpace();
 				GUILayout.EndHorizontal();
@@ -600,7 +600,7 @@ namespace Sabresaurus.SabreCSG
 			GUILayout.Label("Grid size", labelStyle);
 
 			CurrentSettings.PositionSnapDistance = EditorGUILayout.FloatField(CurrentSettings.PositionSnapDistance, GUILayout.MaxWidth(70f),GUILayout.MinWidth(30f));
-			
+
 			if (SabreGUILayout.Button("-", EditorStyles.miniButtonLeft))
 			{
 				CurrentSettings.ChangePosSnapDistance(.5f);

@@ -869,11 +869,11 @@ namespace Sabresaurus.SabreCSG
             // Set the style height to match the rectangle (so it stretches instead of tiling)
             toolbar.fixedHeight = toolbarRect.height + toolbarHeight;
             // Draw the actual GUI via a Window
-#if UNITY_2021_2_OR_NEWER
-            SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
-#else
+// #if UNITY_2021_2_OR_NEWER
+//             SabreToolsOverlay.window1 = () => OnToolbarGUI(0);
+// #else
             GUILayout.Window(140010, actualToolbarRect, OnToolbarGUI, "", toolbar);
-#endif
+// #endif
         }
 
         private void OnToolbarGUI(int windowID)
