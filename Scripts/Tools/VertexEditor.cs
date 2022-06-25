@@ -904,13 +904,16 @@ namespace Sabresaurus.SabreCSG
 			{
 				if(selectedVertices != null)
 				{
-					var vertices = new HashSet<Vector3>();
+					var vertices = new List<Vector3>();
                     // Grab all vertices
-					foreach (PrimitiveBrush brush in targetBrushes)
-					{
-                        foreach (var v in SelectedVerticesOfBrush(brush))
-                        {
-                            vertices.Add(brush.transform.TransformPoint(v.Position));
+					foreach (PrimitiveBrush brush in targetBrushes) {
+                        foreach (var v in SelectedVerticesOfBrush(brush)) {
+                            var new_p = brush.transform.TransformPoint(v.Position);
+                            // Vertex is different to previous
+                            // Compare approximately... And stupidly
+                            if (vertices.All(prev_p => new_p != prev_p)) {
+                                vertices.Add(new_p);
+                            }
                         }
 					}
 
@@ -954,6 +957,9 @@ namespace Sabresaurus.SabreCSG
 
                             line.transform.SetParent(parent, true);
                         }
+                    }
+                    else {
+                        Debug.LogError($"Could not export edge with {vertices.Count} vertices selected");
                     }
 				}
 			}
