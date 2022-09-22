@@ -73,7 +73,8 @@ namespace Sabresaurus.SabreCSG
 				bottomToolbarHeight *= 2;
 			}
 
-            Rect rectangle = new Rect(0, sceneView.position.height - bottomToolbarHeight, sceneView.position.width, bottomToolbarHeight);
+            Rect rectangle = new Rect(0, sceneView.position.height - bottomToolbarHeight - 26, sceneView.position.width, bottomToolbarHeight);
+            // Rect rectangle = new Rect(0, 0, sceneView.position.width, bottomToolbarHeight);
 
             GUIStyle style = new GUIStyle(EditorStyles.toolbar);
 
