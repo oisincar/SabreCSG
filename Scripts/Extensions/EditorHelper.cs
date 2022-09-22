@@ -136,12 +136,18 @@ namespace Sabresaurus.SabreCSG
 				sourceMousePosition = EditorGUIUtility.PointsToPixels(sourceMousePosition);
                 // Flip the direction of Y and remove the Scene View top toolbar's height
                 sourceMousePosition.y = Screen.height - sourceMousePosition.y - (TOOLBAR_HEIGHT * EditorGUIUtility.pixelsPerPoint);
+
+                // TODO: Hack!
+                sourceMousePosition.y -= 10.0f;
             }
             else
             {
                 // Flip the direction of Y and remove the Scene View top toolbar's height
 				float screenHeightPoints = (Screen.height / EditorGUIUtility.pixelsPerPoint);
 				sourceMousePosition.y = screenHeightPoints - sourceMousePosition.y - (TOOLBAR_HEIGHT);
+
+                // TODO: Hack!
+                sourceMousePosition.y -= 10.0f;
             }
 			
 #else

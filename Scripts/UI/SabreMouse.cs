@@ -34,6 +34,7 @@ namespace Sabresaurus.SabreCSG
                 angle += 180;
             }
 
+            // TODO: This better...
             while (angle > 180)
             {
                 angle -= 180;
