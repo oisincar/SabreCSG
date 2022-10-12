@@ -919,48 +919,51 @@ namespace Sabresaurus.SabreCSG
 
 					ClearSelection();
 
-                    if (vertices.Count == 2) {
+                    if (vertices.Count == 2)
+                    {
                         Debug.Log("Creating Edge");
-
-                        var tmp = new List<Vector3>(vertices);
-                        // TODO: Add to local CSG object, but need to change what's loaded into play mode.
-                        // This might be wrong with compound brushes idk.
-                        var csg = targetBrushes[0].GetCSGModel();
-                        var meshgroup = csg.transform.Find("MeshGroup");
-                        var ground = meshgroup.GetComponent<Environment.TerrainRoot>();
-
-                        Vector3 ave = (tmp[0] + tmp[1]) / 2;
-                        Vector3 p1 = tmp[0] - ave;
-                        Vector3 p2 = tmp[1] - ave;
-
-                        if (ground == null) {
-                            Debug.LogError("Cannot create TL; try assign 'ground' component to MeshGroup");
-                        }
-                        // Check if we've already made one that's identical!
-                        else if (csg.transform.GetComponentsInChildren<Environment.Alignable>()
-                            .Any(a => a.IsEquilivent(ground, ave, p1, p2))) {
-                            Debug.LogError("Could not create alignable, another already exists!");
-                        }
-                        else {
-                            GameObject line = new GameObject("TransitionLine");
-
-                            line.transform.position = ave;
-                            var ed = line.AddComponent<Environment.Alignable>();
-                            ed.Initilize(ground, p1, p2);
-
-                            // Create a folder for em if there isn't one already...
-                            var parent = csg.transform.Find("Alignables");
-                            if (!parent) {
-                                parent = new GameObject("Alignables").transform;
-                                parent.parent = csg.transform;
-                            }
-
-                            line.transform.SetParent(parent, true);
-                        }
+                        CreateAlignable(vertices[0], vertices[1]);
                     }
                     else {
                         Debug.LogError($"Could not export edge with {vertices.Count} vertices selected");
                     }
+				}
+			}
+			if (GUILayout.Button("WL: Create Axis-aligned Alignables", EditorStyles.miniButton))
+			{
+				if(selectedVertices != null) {
+					var vertices = new List<Vector3>();
+                    // Grab all vertices
+					foreach (PrimitiveBrush brush in targetBrushes) {
+                        foreach (var v in SelectedVerticesOfBrush(brush)) {
+                            var new_p = brush.transform.TransformPoint(v.Position);
+                            // Vertex is different to previous
+                            // Compare approximately... And stupidly
+                            if (vertices.All(prev_p => new_p != prev_p)) {
+                                vertices.Add(new_p);
+                            }
+                        }
+					}
+
+					ClearSelection();
+
+                    // Find pairs of verts that are aligned along an axis.
+                    int numCreated = 0;
+                    for (int i = 0; i < vertices.Count; i++) {
+                        for (int j = i+1; j < vertices.Count; j++) {
+                            int numSharedAxis = 0;
+                            var p0 = vertices[i];
+                            var p1 = vertices[j];
+                            if (p0.x == p1.x) numSharedAxis += 1;
+                            if (p0.y == p1.y) numSharedAxis += 1;
+                            if (p0.z == p1.z) numSharedAxis += 1;
+
+                            if (numSharedAxis == 2) {
+                                if (CreateAlignable(p0, p1)) numCreated += 1;
+                            }
+                        }
+                    }
+                    Debug.Log($"Successfully created {numCreated} new Alignables");
 				}
 			}
 
@@ -1021,6 +1024,51 @@ namespace Sabresaurus.SabreCSG
             );
 
             GUILayout.EndHorizontal();
+        }
+
+        /// Returns if the alignable was created successfully.
+        private bool CreateAlignable(Vector3 pos0, Vector3 pos1) {
+            // TODO: Add to local CSG object, but need to change what's loaded into play mode.
+            // This might be wrong with compound brushes idk.
+            var csg = targetBrushes[0].GetCSGModel();
+            var meshgroup = csg.transform.Find("MeshGroup");
+            var ground = meshgroup.GetComponent<Environment.TerrainRoot>();
+
+            Vector3 ave = (pos0 + pos1) / 2;
+            Vector3 p1 = pos0 - ave;
+            Vector3 p2 = pos1 - ave;
+
+            if (ground == null)
+            {
+                Debug.LogError("Cannot create TL; try assign 'ground' component to MeshGroup");
+                return false;
+            }
+            // Check if we've already made one that's identical!
+            else if (csg.transform.GetComponentsInChildren<Environment.Alignable>()
+                .Any(a => a.IsEquilivent(ground, ave, p1, p2)))
+            {
+                Debug.LogError("Could not create alignable, another already exists!");
+                return false;
+            }
+            else
+            {
+                GameObject line = new GameObject("TransitionLine");
+
+                line.transform.position = ave;
+                var ed = line.AddComponent<Environment.Alignable>();
+                ed.Initilize(ground, p1, p2);
+
+                // Create a folder for em if there isn't one already...
+                var parent = csg.transform.Find("Alignables");
+                if (!parent)
+                {
+                    parent = new GameObject("Alignables").transform;
+                    parent.parent = csg.transform;
+                }
+
+                line.transform.SetParent(parent, true);
+                return true;
+            }
         }
 
         List<Vertex> SelectedVerticesOfBrush(Brush brush)
