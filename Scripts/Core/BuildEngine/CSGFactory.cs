@@ -519,6 +519,7 @@ namespace Sabresaurus.SabreCSG
 
                 GameObject materialMesh = new GameObject("MaterialMesh", typeof(MeshFilter), typeof(MeshRenderer));
                 materialMesh.transform.SetParent(meshGroup, false);
+				materialMesh.layer = meshGroup.gameObject.layer;
 
                 // Set the mesh to be rendered
                 materialMesh.GetComponent<MeshFilter>().sharedMesh = mesh;
@@ -540,6 +541,7 @@ namespace Sabresaurus.SabreCSG
 
                 GameObject colliderMesh = new GameObject("CollisionMesh", typeof(MeshCollider));
                 colliderMesh.transform.SetParent(meshGroup, false);
+				colliderMesh.layer = meshGroup.gameObject.layer;
 
                 // Set the mesh to be rendered
                 colliderMesh.GetComponent<MeshCollider>().sharedMesh = mesh;

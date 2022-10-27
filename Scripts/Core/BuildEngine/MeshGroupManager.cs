@@ -226,6 +226,7 @@ namespace Sabresaurus.SabreCSG
             //newGameObject.transform.parent = meshGroupHolder;
 
             newGameObject.transform.SetParent(meshGroupHolder, false);
+            newGameObject.layer = meshGroupHolder.gameObject.layer;
 
 #if UNITY_EDITOR
             if (buildSettings.SaveMeshesAsAssets)
@@ -348,6 +349,7 @@ namespace Sabresaurus.SabreCSG
             meshCollider.sharedMaterial = buildSettings.DefaultPhysicsMaterial;
             // Reparent
             newGameObject.transform.SetParent(meshGroupHolder, false);//.parent = meshGroupHolder;
+            newGameObject.layer = meshGroupHolder.gameObject.layer;
 
 #if UNITY_EDITOR
             if (buildSettings.SaveMeshesAsAssets)
