@@ -1302,7 +1302,7 @@ namespace Sabresaurus.SabreCSG
 
             brushMenuRect = new Rect(
                 0,
-                (sceneView.position.height - Toolbar.bottomToolbarHeight) - BRUSH_MENU_HEIGHT,
+                (sceneView.position.height - Toolbar.bottomToolbarHeight) - BRUSH_MENU_HEIGHT - 50, // HACK to componsate for top toolbar offset.
                 BRUSH_MENU_WIDTH,
                 BRUSH_MENU_HEIGHT
             );
@@ -1310,7 +1310,7 @@ namespace Sabresaurus.SabreCSG
 // #if UNITY_2021_2_OR_NEWER
 //             SabreToolsOverlay.window1 = () => OnTopToolbarGUI(0);
 // #else
-            // GUILayout.Window(140007, rectangle, OnTopToolbarGUI, "", style);
+            GUILayout.Window(140007, rectangle, OnTopToolbarGUI, "", style);
 // #endif
 
             if (primaryTargetBrush != null)
@@ -1324,7 +1324,7 @@ namespace Sabresaurus.SabreCSG
 // #if UNITY_2021_2_OR_NEWER
 //                 SabreToolsOverlay.window2 = () => OnBrushSettingsGUI(0);
 // #else
-                // GUILayout.Window(140011, brushMenuRect, OnBrushSettingsGUI, "", style);
+                GUILayout.Window(140011, brushMenuRect, OnBrushSettingsGUI, "", style);
 // #endif
             }
         }
