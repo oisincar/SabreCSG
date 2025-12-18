@@ -111,13 +111,13 @@ namespace Sabresaurus.SabreCSG
 
             using (new NamedVerticalScope("Default Material"))
             {
-                PhysicMaterial lastPhysicsMaterial = defaultPhysicsMaterialProperty.objectReferenceValue as PhysicMaterial;
+                PhysicsMaterial lastPhysicsMaterial = defaultPhysicsMaterialProperty.objectReferenceValue as PhysicsMaterial;
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(defaultPhysicsMaterialProperty, new GUIContent("Default Physics Material"));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    PhysicMaterial newPhysicsMaterial = defaultPhysicsMaterialProperty.objectReferenceValue as PhysicMaterial;
+                    PhysicsMaterial newPhysicsMaterial = defaultPhysicsMaterialProperty.objectReferenceValue as PhysicsMaterial;
 
                     // Update the built mesh colliders that use the old material
                     UpdatePhysicsMaterial(lastPhysicsMaterial, newPhysicsMaterial);
@@ -373,7 +373,7 @@ namespace Sabresaurus.SabreCSG
             }
         }
 
-        private void UpdatePhysicsMaterial(PhysicMaterial oldMaterial, PhysicMaterial newMaterial)
+        private void UpdatePhysicsMaterial(PhysicsMaterial oldMaterial, PhysicsMaterial newMaterial)
         {
             // If the physics material has changed
             if (newMaterial != oldMaterial)

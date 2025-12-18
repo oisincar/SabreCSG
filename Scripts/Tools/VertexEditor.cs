@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Environment.Alignable;
 using UnityEditor;
 
 namespace Sabresaurus.SabreCSG
@@ -1044,7 +1045,7 @@ namespace Sabresaurus.SabreCSG
                 return false;
             }
             // Check if we've already made one that's identical!
-            else if (csg.transform.GetComponentsInChildren<Environment.Alignable>()
+            else if (csg.transform.GetComponentsInChildren<Alignable>()
                 .Any(a => a.IsEquilivent(ground, ave, p1, p2)))
             {
                 Debug.LogError("Could not create alignable, another already exists!");
@@ -1055,7 +1056,7 @@ namespace Sabresaurus.SabreCSG
                 GameObject line = new GameObject("TransitionLine");
 
                 line.transform.position = ave;
-                var ed = line.AddComponent<Environment.Alignable>();
+                var ed = line.AddComponent<Alignable>();
                 ed.Initilize(ground, p1, p2);
 
                 // Create a folder for em if there isn't one already...
