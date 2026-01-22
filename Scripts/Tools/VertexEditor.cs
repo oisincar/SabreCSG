@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Environment.Alignable;
+using Environment.Terrain;
 using UnityEditor;
 
 namespace Sabresaurus.SabreCSG
@@ -1033,7 +1034,7 @@ namespace Sabresaurus.SabreCSG
             // This might be wrong with compound brushes idk.
             var csg = targetBrushes[0].GetCSGModel();
             var meshgroup = csg.transform.Find("MeshGroup");
-            var ground = meshgroup.GetComponent<Environment.TerrainRoot>();
+            var ground = meshgroup.GetComponent<TerrainNode>();
 
             Vector3 ave = (pos0 + pos1) / 2;
             Vector3 p1 = pos0 - ave;
